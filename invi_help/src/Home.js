@@ -197,9 +197,7 @@ const Home = () => {
             <br />
         </div>
 
-      <button className='bg-black text-black' onClick={()=>{ navigate("/signin") }}>
-        Signin
-      </button>
+      
       </>
     )
 }
