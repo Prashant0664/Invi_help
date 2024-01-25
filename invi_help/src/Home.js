@@ -90,7 +90,7 @@ const Home = () => {
     return (
         <>
         <div className='bg-white m-auto w-[350px]'>
-      'Complete Data Fetching may take time, wait for while after clicking the button'
+      'Complete Data Fetching may take time, wait for while after clicking the button, click again on button for more detail'
             {/* ------------------- */}
             {showg ? <>
                 <button className='p-2 m-auto flex bg-green-300 justify-center items-center' onClick={() => { hgdata();
