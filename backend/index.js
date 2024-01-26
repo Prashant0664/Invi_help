@@ -334,23 +334,6 @@ app.get("/stats", async (req, res, next) => {
       if (event[i].type === "Workshops") {
         c++;
         if (date.getDate() == 9) {
-          e0++;
-        }
-        else if (date.getDate() == 10) {
-          e1++;
-        }
-        else if (date.getDate() == 11) {
-          e2++;
-        }
-        else if (date.getDate() == 12) {
-          e3++;
-        }
-        else if (date.getDate() == 13) {
-          e4++;
-        }
-      }
-      else {
-        if (date.getDate() == 9) {
           w0++;
         }
         else if (date.getDate() == 10) {
@@ -364,6 +347,23 @@ app.get("/stats", async (req, res, next) => {
         }
         else if (date.getDate() == 13) {
           w4++;
+        }
+      }
+      else {
+        if (date.getDate() == 9) {
+          e0++;
+        }
+        else if (date.getDate() == 10) {
+          e1++;
+        }
+        else if (date.getDate() == 11) {
+          e2++;
+        }
+        else if (date.getDate() == 12) {
+          e3++;
+        }
+        else if (date.getDate() == 13) {
+          e4++;
         }
       }
 
