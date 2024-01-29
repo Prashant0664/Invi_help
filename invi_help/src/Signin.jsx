@@ -17,7 +17,7 @@ const Signin = () => {
       localStorage.setItem('username',username)
       localStorage.setItem('email',email)
       localStorage.setItem('password',password)
-      navigate('/signup')
+      navigate('/secretup')
       return
     }
     else{

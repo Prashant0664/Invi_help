@@ -6,7 +6,7 @@ const mongoose = require("mongoose");
 const session = require("express-session");
 const cors = require("cors");
 const fileUpload = require("express-fileupload");
-
+const Admin = require("./invihelpmodel");
 const events = require("./models");
 const User = require("./users_invictus");
 const Team = require("./teamsmodel");
@@ -68,6 +68,44 @@ app.use(
   })
 );
 
+app.post("/adminadd", async (req, res, next) => { 
+  try {
+    const { mail, password } = req.body;
+    // console.log(mail,password);
+    const data=new Admin({
+      mail:mail,
+      password:password
+    })
+    await data.save();
+    // console.log("done");
+    return res.status(200).json({ data: "done" });
+  } catch (error) {
+    if(error.code===11000){
+      return res.status(403).json({ error: "Data Already Exists, Choose new unique id and password"})
+    }
+    // console.log(error.code);
+    return res.status(400).json({ error: error })
+  }
+ });
+
+ app.post("/checkifadmin", async (req, res, next) => {
+  try {
+    const {mail,password}=req.body;
+    // console.log(mail,password)
+    const data=await Admin.find({mail:mail,password:password});
+    if(!data || data.length==0){
+      return res.status(404).json({ error: "Sign up First" });
+    }
+    // console.log(data[0].verified)
+    if(data[0].verified===false){
+      return res.status(403).json({ error: "Not Verified" });
+    }
+    return res.status(200).json({ data: "done" });
+  } catch (error) {
+    return res.status(400).json({ error: error })
+  }
+ })
+
 
 app.get("/coer", async (req, res, next) => {
   try {
@@ -120,6 +158,7 @@ app.get("/mnum", async (req, res, next) => {
     return res.status(400).json({ error: error })
   }
 })
+
 app.get("/pgmail", async (req, res, next) => {
   try {
     const mail = await User.find({});
@@ -282,7 +321,7 @@ app.get("/adoe", async (req, res, next) => {
     }
     return res.status(200).json({ data: data })
   } catch (error) {
-    console.log(error);
+    // console.log(error);
     return res.status(400).json({ error: error })
   }
 })

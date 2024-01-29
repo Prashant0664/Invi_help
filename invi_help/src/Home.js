@@ -1,14 +1,12 @@
 import React from 'react'
 import axios from 'axios'
-import { getGenData, getevenlist } from './helper/index'
+import { getGenData, getevenlist, geteventreg } from './helper/index'
 import { BrowserRouter, Routes, Route,useNavigate } from 'react-router-dom';
 import "./App.css"
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
-import { geteventreg } from './helper/index';
 const Home = () => {
-  const navigate=useNavigate();
-
+    const navigate=useNavigate();
     const [gdata, setgData] = React.useState([]);
     const [showg, setShowg] = React.useState(false);
     const [gkeys, setgKeys] = React.useState([]);
@@ -18,7 +16,6 @@ const Home = () => {
     const [sl, setsl] = React.useState(false);
     const [sl1, setsl1] = React.useState(false);
     const [sl2, setsl2] = React.useState(false);
-
     const geteventregf = async () => {
         try {
             setsl1(true);

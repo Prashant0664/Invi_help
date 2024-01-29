@@ -5,8 +5,23 @@ const getGenData = async () => {
         const data = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/stats`);
         return data;
     } catch (error) {
-        console.log(error)
         // alert("error occurred")
+        return { error: "error"};
+    }
+}
+const checkifadmin=async(mail,password)=>{
+    try {
+        const data = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/checkifadmin`,{
+            mail:mail,
+            password:password
+        });
+        return data;
+    } catch (error) {
+        if(error.response.data.error==="Not Verified"){
+            alert("For admin access contact +919311450234 or +919810511869");
+            return {}
+        }
+        alert(error.response.data.error)
         return { error: "error"};
     }
 }
@@ -16,8 +31,6 @@ const getevenlist=async()=>{
         return data;
     }
     catch(error){
-        console.log(error)
-        // alert("error occurred")
         return { error: "error"};
     }
 }
@@ -27,9 +40,22 @@ const geteventreg=async()=>{
         return data.data;
     }
     catch(error){
-        console.log(error)
         // alert("error occurred")
         return { error: "error"};
     }
 }
-export { getGenData, getevenlist,geteventreg };
+const addadmin=async(email,password)=>{
+    try{
+        const data=await axios.post(`${process.env.REACT_APP_BACKEND_URL}/adminadd`,{mail:email,password:password});
+        return data;
+    }
+    catch(error){
+
+        if(error.response && error.response.status===403){
+            alert(error.response.data.error);
+        }
+        // alert("error occurred")
+        return { error: "error"};
+    }
+}
+export {checkifadmin, getGenData, getevenlist,geteventreg, addadmin };
