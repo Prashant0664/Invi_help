@@ -34,7 +34,7 @@ const Home = () => {
         try {
             const data = await getevenlist();
             seteventdata([data.data.data]);
-
+            console.log(data.data.data);
             const worksheet = XLSX.utils.json_to_sheet(eventdata[0]);
             const workbook = XLSX.utils.book_new();
             XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
@@ -48,7 +48,9 @@ const Home = () => {
     };
     const generalData = async () => {
         try {
+            setShowg(true);
             const data = await getGenData();
+
             setgData({
                 "Total Events+Workshops": data.data["Total Events+Workshops"],
                 "Total Events": data.data["Total Events"],
@@ -76,7 +78,6 @@ const Home = () => {
                 "Total colleges": data.data["Total colleges"],
                 "Colleges": data.data["Colleges"],
             });
-            setShowg(true);
             setgKeys(Object.keys(gdata));
             return;
         } catch (error) {

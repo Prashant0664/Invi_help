@@ -275,13 +275,14 @@ app.get("/adoe", async (req, res, next) => {
         "registrationEndDate": datae[i].registrationEndDate,
         "location": datae[i].location,
         "image": datae[i].image,
-        "readmore": datae[i].readmore
+        "readmore": datae[i].readmore,
+        "websitelink":`${datae[i].type==="Events"?("https://www.invictusdtu.in/Events?name="+String(datae[i].name)):("https://www.invictusdtu.in/Workshops?name="+String(datae[i].name))}`
       }
       data.push(jsonf)
     }
     return res.status(200).json({ data: data })
   } catch (error) {
-    // console.log(error);
+    console.log(error);
     return res.status(400).json({ error: error })
   }
 })
