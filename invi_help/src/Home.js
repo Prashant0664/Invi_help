@@ -15,11 +15,17 @@ const Home = () => {
     const [eventdata, seteventdata] = React.useState([]);
     const [eventreg, seteventreg] = React.useState([]);
     const [showeg, setShoweg] = React.useState(false);
+    const [sl, setsl] = React.useState(false);
+    const [sl1, setsl1] = React.useState(false);
+    const [sl2, setsl2] = React.useState(false);
+
     const geteventregf = async () => {
         try {
+            setsl1(true);
             const data = await geteventreg();
             seteventreg(data.data);
             setShoweg(true);
+            setsl1(false);
             return data.data;
         }
         catch (error) {
@@ -32,11 +38,13 @@ const Home = () => {
     }
     const exportToExcel = async () => {
         try {
+            setsl2(true);
             const data = await getevenlist();
             seteventdata([data.data.data]);
             console.log(data.data.data);
             const worksheet = XLSX.utils.json_to_sheet(eventdata[0]);
             const workbook = XLSX.utils.book_new();
+            setsl2(false);
             XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
             const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
             const blob = new Blob([excelBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8' });
@@ -48,9 +56,9 @@ const Home = () => {
     };
     const generalData = async () => {
         try {
-            setShowg(true);
+            setsl(true);
             const data = await getGenData();
-
+            
             setgData({
                 "Total Events+Workshops": data.data["Total Events+Workshops"],
                 "Total Events": data.data["Total Events"],
@@ -78,7 +86,9 @@ const Home = () => {
                 "Total colleges": data.data["Total colleges"],
                 "Colleges": data.data["Colleges"],
             });
+            setShowg(true);
             setgKeys(Object.keys(gdata));
+            setsl(false);
             return;
         } catch (error) {
             alert("error occurred")
@@ -146,7 +156,7 @@ const Home = () => {
                 </div></> : <>
                 <button className='mt-2 p-2 m-auto flex bg-green-300 justify-center items-center' onClick={() => { generalData();
                   }}>
-                    General Stats
+                    {!sl?"General Stats":"Stats Loading..."}
                 </button>
                 <br />
             </>}
@@ -158,7 +168,7 @@ const Home = () => {
                 <br />
                 <button className='p-2 m-auto flex bg-green-300 justify-center items-center' onClick={() => { geteventregf();
                  }}>
-                    Events Registration Count
+                    {!sl1?"Events Registration Count":"Registration Loading..."} 
                 </button>
                 <br />
             </> :
@@ -193,7 +203,7 @@ const Home = () => {
             }
             <br />
             <button className='p-2 m-auto flex bg-green-300 justify-center items-center' onClick={() => { exportToExcel();}}>
-                Download Event Basic Detail
+                {!sl2?"Download Event Basic Detail":"Downloading..."}
             </button>
             <br />
         </div>
