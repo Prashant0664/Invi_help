@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { checkifadmin } from './helper';
 import { useNavigate } from 'react-router-dom';
-import { getGenData, getevenlist, geteventreg } from './helper/index'
+import { getGenData, getevenlist, geteventreg, download } from './helper/index'
 import "./App.css"
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
@@ -18,15 +18,20 @@ const Adminlogin = () => {
     const [sl, setsl] = React.useState(false);
     const [sl1, setsl1] = React.useState(false);
     const [sl2, setsl2] = React.useState(false);
-    const [sf, setsf] = React.useState(false);
+    const [sf, setsf] = React.useState(true);
     const geteventregf = async () => {
         try {
             setsl1(true);
-            const data = await geteventreg();
-            seteventreg(data.data);
+           // const data = await geteventreg();
+            seteventreg([
+                {
+                    name: 'Ui/Ux Designer',
+                    cnt: 10
+                }
+            ]);
             setShoweg(true);
             setsl1(false);
-            return data.data;
+           // return data.data;
         }
         catch (error) {
             // alert("error occurred")
@@ -35,6 +40,24 @@ const Adminlogin = () => {
     }
     const closerg = () => {
         setShoweg(false);
+    }
+    const getExcel = async(name) =>{
+        try{
+            const response = await download(name);
+            console.log(name, response);
+            if(response.error){
+                alert("error in downloading....");
+            }
+            const excelBuffer = new Uint8Array(response.data.buffer.data);
+
+            const blob = new Blob([excelBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8' });
+            saveAs(blob, `${name}.xlsx`);
+            
+        }
+        catch (error) {
+            // alert("error occurred")
+            return;
+        }
     }
     const exportToExcel = async () => {
         try {
@@ -230,7 +253,9 @@ const Adminlogin = () => {
                                         {eventreg && eventreg.map((eventn, index) => {
                                             return (
                                                 <>
-                                                    <tr key={index} className=' border border-solid border-black'>
+                                                    <tr key={index} className=' border border-solid border-black' onClick={()=>{
+                                                        getExcel(eventn.name);
+                                                    }}>
                                                         <td className='border border-solid border-black pl-2 cursor-pointer'>{eventn.name}</td>
                                                         <td className='border border-solid border-black w-[80px] text-center'>{eventn.cnt}</td>
                                                     </tr>
