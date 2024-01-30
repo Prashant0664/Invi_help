@@ -19,19 +19,34 @@ const Adminlogin = () => {
     const [sl1, setsl1] = React.useState(false);
     const [sl2, setsl2] = React.useState(false);
     const [sf, setsf] = React.useState(false);
-    const geteventregf = async () => {
+    const geteventregfd = async (name) => {
         try {
             setsl1(true);
-           // const data = await geteventreg();
-            seteventreg([
-                {
-                    name: 'Ui/Ux Designer',
-                    cnt: 10
-                }
-            ]);
+           const data = await geteventreg();
+            // seteventreg([
+            //     {
+            //         name: "name",
+            //         cnt: 10
+            //     }
+            // ]);
             setShoweg(true);
             setsl1(false);
            // return data.data;
+        }
+        catch (error) {
+            // alert("error occurred")
+            return { error: "error" };
+        }
+    }
+    const geteventregf = async () => {
+        try {
+            setsl1(true);
+            const data = await geteventreg();
+            console.log("ihkj",data)
+            seteventreg(data.data);
+            setShoweg(true);
+            setsl1(false);
+            return data.data;
         }
         catch (error) {
             // alert("error occurred")
@@ -231,7 +246,7 @@ const Adminlogin = () => {
                             <button className='p-2 m-auto flex bg-green-300 justify-center items-center' onClick={() => {
                                 geteventregf();
                             }}>
-                                {!sl1 ? "Download Participant List" : "Registration Loading..."}
+                                {!sl1 ? "Download Participant List" : "List Loading..."}
                             </button>
                             <br />
                         </> :
@@ -253,10 +268,10 @@ const Adminlogin = () => {
                                         {eventreg && eventreg.map((eventn, index) => {
                                             return (
                                                 <>
-                                                    <tr key={index} className=' border border-solid border-black' onClick={()=>{
-                                                        getExcel(eventn.name);
-                                                    }}>
-                                                        <td className='border border-solid border-black pl-2 cursor-pointer'>{eventn.name}</td>
+                                                    <tr key={index} className=' border border-solid border-black' 
+                                                    >
+                                                        <td className='border border-solid border-black pl-2 cursor-pointer' onClick={()=>{
+                                                        getExcel(eventn.name)}}>{eventn.name} </td>
                                                         <td className='border border-solid border-black w-[80px] text-center'>{eventn.cnt}</td>
                                                     </tr>
                                                 </>

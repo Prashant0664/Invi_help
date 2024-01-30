@@ -7,7 +7,7 @@ const session = require("express-session");
 const cors = require("cors");
 const fileUpload = require("express-fileupload");
 const Admin = require("./invihelpmodel");
-const events = require("./models");
+const Event = require("./models");
 const User = require("./users_invictus");
 const Team = require("./teamsmodel");
 const excelJs = require("exceljs");
@@ -111,11 +111,11 @@ app.post("/adminadd", async (req, res, next) => {
 app.get("/coer", async (req, res, next) => {
   try {
     const datae = await User.find({});
-    const event = await events.find({});
+    const event = await Event.find({});
     const mp = new Map();
     for (var i = 0; i < datae.length; i++) {
       for (var j = 0; j < datae[i].eventList.length; j++) {
-        const ename = await events.find({ _id: datae[i].eventList[j] });
+        const ename = await Event.find({ _id: datae[i].eventList[j] });
         if (!ename[0]) {
           // console.log(ename[0], " ", datae[i].eventList[j], " ", datae[i].username);
           continue;
@@ -230,7 +230,7 @@ app.get("/mailandnumwithname", async (req, res, next) => {
 
 app.get("/eventday/:id", async (req, res, next) => {
   try {
-    const event = await events.find({});
+    const event = await Event.find({});
     const id = req.params.id;
     var list = [];
     for (let i = 0; i < event.length; i++) {
@@ -254,7 +254,7 @@ app.get("/eventday/:id", async (req, res, next) => {
 app.get("/bid/:id", async (req, res, next) => {
   try {
     const id = req.params.id;
-    const byid = await events.findById(id);
+    const byid = await Event.findById(id);
     return res.status(200).json({ data: byid })
   } catch (error) {
     // console.log(error);
@@ -267,7 +267,7 @@ app.get("/noat", async (req, res, next) => {
     var data = [];
     for (var i = 0; i < datae.length; i++) {
       const tl = await User.findById(datae[i].teamLeader);
-      const ed = await events.findById(datae[i].eventName);
+      const ed = await Event.findById(datae[i].eventName);
       if (!tl || !ed) {
         continue;
       }
@@ -298,7 +298,7 @@ app.get("/noat", async (req, res, next) => {
 
 app.get("/adoe", async (req, res, next) => {
   try {
-    const datae = await events.find({});
+    const datae = await Event.find({});
     var data = [];
     for (var i = 0; i < datae.length; i++) {
       var jsonf = {
@@ -331,7 +331,7 @@ app.get("/stats", async (req, res, next) => {
   try {
     const datae = await User.find({});
     const teamsiz = await Team.find({});
-    const event = await events.find({});
+    const event = await Event.find({});
     var c = 0;
     var e0 = 0;
     var e1 = 0;
@@ -459,16 +459,25 @@ app.get("/stats", async (req, res, next) => {
 app.post("/download",async(req,res)=>{
   try {
       const {name} = req.body;
-      let teams;
-      
+      var teams;
       if(name === ""){
         teams = await Team.find({}).populate('teamLeader').populate('eventName').populate('member');
       }
       else{
-        const event = await events.findOne({name});
-
+        const event = await Event.findOne({name});
+        // console.log(event)
+        
         if(event){
-          teams = await Team.find({eventName: event?._id}).populate('teamLeader').populate('eventName').populate('member');
+          try{
+            teams = await Team.find({eventName: event._id})
+            .populate('teamLeader')
+            .populate('eventName')
+            .populate('member');
+          }
+          catch(err){
+            console.log(err);
+          }
+          // return res.json({}); 
         }
         else{
           return res.json({
@@ -476,7 +485,6 @@ app.post("/download",async(req,res)=>{
           })
         }
       }
-
       if(teams.length === 0){
         return res.json({
           error: "teams not found!"

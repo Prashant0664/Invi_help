@@ -65,7 +65,7 @@ const download = async(name) =>{
         return data;
     }
     catch(error){
-
+        console.log("found you at",error);
         if(error.response && error.response.status===403){
             alert(error.response.data.error);
         }
