@@ -58,4 +58,20 @@ const addadmin=async(email,password)=>{
         return { error: "error"};
     }
 }
-export {checkifadmin, getGenData, getevenlist,geteventreg, addadmin };
+
+const download = async(name) =>{
+    try{
+        const data=await axios.post(`${process.env.REACT_APP_BACKEND_URL}/download`,{name:name});
+        return data;
+    }
+    catch(error){
+
+        if(error.response && error.response.status===403){
+            alert(error.response.data.error);
+        }
+        // alert("error occurred")
+        return { error: "error"};
+    }
+}
+
+export {checkifadmin, getGenData, getevenlist,geteventreg, addadmin, download };
