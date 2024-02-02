@@ -110,34 +110,50 @@ app.post("/adminadd", async (req, res, next) => {
 
 app.get("/coer", async (req, res, next) => {
   try {
-    const datae = await User.find({});
-    const event = await Event.find({});
-    const mp = new Map();
-    for (var i = 0; i < datae.length; i++) {
-      for (var j = 0; j < datae[i].eventList.length; j++) {
-        const ename = await Event.find({ _id: datae[i].eventList[j] });
-        if (!ename[0]) {
-          // console.log(ename[0], " ", datae[i].eventList[j], " ", datae[i].username);
-          continue;
-        }
-        if (mp.has(ename[0].name)) {
-          mp.set(ename[0].name, mp.get(ename[0].name) + 1);
-        }
-        else {
-          mp.set(ename[0].name, 1);
-        }
+    // const datae = await User.find({});
+    // const event = await Event.find({});
+    const teams = await Team.find({},{eventName: 1, member: 1, _id:0}).populate(
+      {
+        path: 'eventName',
+        select: 'name',
       }
-    }
+    ).exec();
+   // console.log(teams);
+    const mp = new Map();
+    // for (var i = 0; i < datae.length; i++) {
+    //   for (var j = 0; j < datae[i].eventList.length; j++) {
+    //     const ename = await Event.find({ _id: datae[i].eventList[j] });
+    //     if (!ename[0]) {
+    //       // console.log(ename[0], " ", datae[i].eventList[j], " ", datae[i].username);
+    //       continue;
+    //     }
+    //     if (mp.has(ename[0].name)) {
+    //       mp.set(ename[0].name, mp.get(ename[0].name) + 1);
+    //     }
+    //     else {
+    //       mp.set(ename[0].name, 1);
+    //     }
+    //   }
+    // }
 
-    for (let i = 0; i < event.length; i++) {
-      if (!mp.has(event[i].name)) {
-        mp.set(event[i].name, 0);
+    // for (let i = 0; i < event.length; i++) {
+    //   if (!mp.has(event[i].name)) {
+    //     mp.set(event[i].name, 0);
+    //   }
+    // }
+    for(let i=0;i<teams.length;i++){
+      if(mp.has(teams[i].eventName.name)){
+        mp.set(teams[i].eventName.name, mp.get(teams[i].eventName.name) + teams[i].member.length);
+      }
+      else{
+        mp.set(teams[i].eventName.name, teams[i].member.length);
       }
     }
     var d = [];
     for (const [key, value] of mp) {
       d.push({ name: `${key}`, cnt: `${value}` })
     }
+
     return res.status(200).json({ data: d })
   }
   catch (error) {
