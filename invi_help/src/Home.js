@@ -115,7 +115,7 @@ const Home = () => {
                         </thead>
                         <tbody className=''>
                             {gkeys.map((key, index) => {
-                                if (key != 'Colleges')
+                                if (key !== 'Colleges')
                                     return (
                                         <>
                                             <tr key={index} className=' border border-solid border-black'>
