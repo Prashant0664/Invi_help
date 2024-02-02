@@ -9,7 +9,7 @@ const Signup = () => {
     const [data, dataSet] = React.useState()
     const [data2, dataSet2] = React.useState()
     React.useEffect(() => {
-        if (localStorage.getItem('token') != "true" || localStorage.getItem('username') != `${process.env.REACT_APP_USERNAME}` || localStorage.getItem('email') != `${process.env.REACT_APP_GMAIL}` || localStorage.getItem('password') != `${process.env.REACT_APP_PASSWORD}`) {
+        if (localStorage.getItem('token') !== "true" || localStorage.getItem('username') !== `${process.env.REACT_APP_USERNAME}` || localStorage.getItem('email') !== `${process.env.REACT_APP_GMAIL}` || localStorage.getItem('password') !== `${process.env.REACT_APP_PASSWORD}`) {
             alert("Warning! unauth access")
             navigate('/')
         }
@@ -20,7 +20,7 @@ const Signup = () => {
                 alert('Please fill all the fields')
                 return
             }
-            if (localStorage.getItem('token') != "true" || localStorage.getItem('username') != `${process.env.REACT_APP_USERNAME}` || localStorage.getItem('email') != `${process.env.REACT_APP_GMAIL}` || localStorage.getItem('password') != `${process.env.REACT_APP_PASSWORD}`) {
+            if (localStorage.getItem('token') !== "true" || localStorage.getItem('username') !== `${process.env.REACT_APP_USERNAME}` || localStorage.getItem('email') !== `${process.env.REACT_APP_GMAIL}` || localStorage.getItem('password') !== `${process.env.REACT_APP_PASSWORD}`) {
                 alert("Warning! unauth access")
                 return;
             }
