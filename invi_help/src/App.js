@@ -8,6 +8,8 @@ import Newadmin from './Newadmin';
 import Adminlogin from './Adminlogin';
 function App() {
   return (
+    <>
+
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Home />} ></Route>
@@ -17,6 +19,10 @@ function App() {
         <Route path="/adminlogin" element={<Adminlogin />} ></Route>
       </Routes>
     </BrowserRouter>
+    <div className='text-white font-bold fixed bottom-0 m-2 max-md:text-slate-400 max-sm:text-slate-500'>
+      Developed by Prashant
+    </div>
+    </>
   );
 }
 
