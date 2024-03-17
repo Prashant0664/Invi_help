@@ -497,7 +497,7 @@ app.post("/download",async(req,res)=>{
             teams = await Team.find({eventName: event._id})
             .populate('teamLeader')
             .populate('eventName')
-            .populate('member');
+            .populate('member').populate('teamname');
           }
           catch(err){
             console.log(err);
